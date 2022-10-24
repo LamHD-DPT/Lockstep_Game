@@ -1,4 +1,3 @@
-using System;
 using Racer.Utilities;
 using UnityEngine;
 
@@ -6,13 +5,20 @@ internal class DialController : SingletonPattern.SingletonPersistent<DialControl
 {
     private UIController _uiController;
 
-    private float _degree;
-
     private Vector3 _angle;
 
-    [SerializeField] private float rotateSpeed = 5;
+    private float _degree;
 
+    public int Degree
+    {
+        get => Mathf.RoundToInt(_degree);
+        private set => _degree = value;
+    }
+
+    [SerializeField] private float rotateSpeed = 5;
     [SerializeField] private Transform icon;
+
+
 
 
     private void Start()
@@ -25,14 +31,12 @@ internal class DialController : SingletonPattern.SingletonPersistent<DialControl
         // Not really precise, but fair enough.
         _degree = (value / Metrics.MaxRotation * Metrics.MaxDegree);
 
-        _degree = Mathf.RoundToInt(_degree);
-
-        if (value.Equals(Metrics.MaxRotation))
-            _degree = 0;
+        if (Degree == Metrics.MaxDegree)
+            Degree = Metrics.MinDegree;
 
         // Debug.Log($"Degree and value while syncing: {_degree}, {value}");
 
-        _uiController.SetDegreeText(_degree);
+        _uiController.SetDegreeText(Degree);
 
         _angle.z = -value;
     }
@@ -42,10 +46,10 @@ internal class DialController : SingletonPattern.SingletonPersistent<DialControl
         // Smoothly move to target rotation.
         icon.localRotation = Quaternion.Slerp(icon.localRotation, Quaternion.Euler(_angle), Time.deltaTime * rotateSpeed);
 
-        if (Input.GetKeyUp(KeyCode.L))
+        if (Input.GetKeyUp(KeyCode.L) && Degree == Metrics.MinDegree)
             _uiController.SetSliderValue(0);
 
-        else if (Input.GetKeyUp(KeyCode.K))
+        else if (Input.GetKeyUp(KeyCode.K) && Degree == Metrics.MinDegree)
             _uiController.SetSliderValue(360);
     }
 }

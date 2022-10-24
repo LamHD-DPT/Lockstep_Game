@@ -30,6 +30,9 @@ internal class GameController : SingletonPattern.Singleton<GameController>
 
     private void InitValues()
     {
+        // Second number will always be less than first's
+        // Last number will always be greater than the second's
+
         CombinationValues = new[]
         {
             Random.Range(1,

@@ -1409,6 +1409,7 @@ MonoBehaviour:
   - Move anti-clockwise once stop at your first number
   - Continue on-past it and obtain your second number
   - Move clockwise and obtain your third number
+  - Congratulations!
   combinationTexts:
   - {fileID: 146665275}
   - {fileID: 204454767}
