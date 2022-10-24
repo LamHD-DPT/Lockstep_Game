@@ -45,11 +45,5 @@ internal class DialController : SingletonPattern.SingletonPersistent<DialControl
     {
         // Smoothly move to target rotation.
         icon.localRotation = Quaternion.Slerp(icon.localRotation, Quaternion.Euler(_angle), Time.deltaTime * rotateSpeed);
-
-        if (Input.GetKeyUp(KeyCode.L) && Degree == Metrics.MinDegree)
-            _uiController.SetSliderValue(0);
-
-        else if (Input.GetKeyUp(KeyCode.K) && Degree == Metrics.MinDegree)
-            _uiController.SetSliderValue(360);
     }
 }

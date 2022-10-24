@@ -39,4 +39,16 @@ internal class UIController : SingletonPattern.Singleton<UIController>
     {
         guideT.text = guideValues[index];
     }
+
+    public void SwitchLeft()
+    {
+        if (DialController.Instance.Degree == Metrics.MinDegree)
+            SetSliderValue(0);
+    }
+
+    public void SwitchRight()
+    {
+        if (DialController.Instance.Degree == Metrics.MinDegree)
+            SetSliderValue(360);
+    }
 }
