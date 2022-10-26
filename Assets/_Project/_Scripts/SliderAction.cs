@@ -2,9 +2,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerUpHandler
 {
+    private RaycastResult _raycastResult;
     private Slider _slider;
+    private GameManager _gameManager;
+
+    private bool _isDrag;
 
     private bool _isOnStep;
     private bool _wasOnStep;
@@ -31,6 +35,14 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         _slider = GetComponent<Slider>();
     }
 
+    private void Start()
+    {
+        _gameManager = GameManager.Instance;
+
+        _prevValue = (int)_slider.value;
+        _curValue = _prevValue;
+    }
+
     private void ResetStep()
     {
         _isOnStep = false;
@@ -54,23 +66,44 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         }
     }
 
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _raycastResult = eventData.pointerPressRaycast;
+
+        // Knob depth: 6
+
+        if (!_isDrag && _raycastResult.depth != 6)
+        {
+            Progress = 0;
+            _gameManager.SetStep(Step.Zero);
+            ResetStep();
+        }
+
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
+        _isDrag = true;
+
         if (Progress == 2)
         {
             if (_curValue < _prevValue &&
-                DialController.Instance.Degree == GameController.Instance.CombinationValues[0])
+                DialController.Instance.Degree == _gameManager.CombinationValues[0])
             {
                 _isOnStep = true;
 
                 ModifyStep();
+            }
+            else if (_antiClockwiseCount > 1)
+            {
+                _isOnStep = false;
             }
         }
 
         if (Progress == 3)
         {
             if (_antiClockwiseCount == 1 &&
-                DialController.Instance.Degree == GameController.Instance.CombinationValues[0])
+                DialController.Instance.Degree == _gameManager.CombinationValues[0])
             {
                 _isOnStep = true;
 
@@ -81,7 +114,7 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if (Progress == 4)
         {
             if (_antiClockwiseCount == 1 &&
-                GameController.Instance.CombinationValues[1] == DialController.Instance.Degree)
+                 DialController.Instance.Degree == _gameManager.CombinationValues[1])
             {
                 _isOnStep = true;
 
@@ -92,7 +125,7 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if (Progress == 5)
         {
             if (_clockwiseCount == 1 &&
-                GameController.Instance.CombinationValues[2] == DialController.Instance.Degree)
+                DialController.Instance.Degree == _gameManager.CombinationValues[2])
             {
                 _isOnStep = true;
 
@@ -105,12 +138,16 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         // Debug.Log($"Value before dragging: {_slider.value}");
 
+        _isDrag = true;
+
         _prevValue = (int)_slider.value;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         // Debug.Log($"Value after dragging: {_slider.value}");
+
+        _isDrag = false;
 
         _curValue = (int)_slider.value;
 
@@ -132,7 +169,7 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 StepFour();
                 break;
             case 4:
-                StepFour();
+                StepFive();
                 break;
             case 5:
                 StepSix();
@@ -161,6 +198,7 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         else
         {
             Progress = 0;
+            _gameManager.SetStep(Step.Zero);
         }
         if (_clockwiseCount == 3)
         {
@@ -173,21 +211,27 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     private void StepThree()
     {
         // Whenever while dragging, value exceeds, report.
-        if (_isOnStep && _wasOnStep)
+
+        if (_isOnStep && _wasOnStep &&
+            DialController.Instance.Degree == _gameManager.CombinationValues[0])
         {
+            _gameManager.SetStep(Step.One);
+
             Progress++;
 
             ResetStep();
         }
         else
         {
-            Progress -= 2;
+            Progress = 0;
+            _gameManager.SetStep(Step.Zero);
         }
     }
 
     private void StepFour()
     {
-        if (_isOnStep && _wasOnStep)
+        if (_isOnStep && _wasOnStep &&
+            DialController.Instance.Degree == _gameManager.CombinationValues[0])
         {
             Progress++;
 
@@ -195,9 +239,34 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
             ResetStep();
         }
-        else if (_curValue != Metrics.MaxRotation)
+        else if (_curValue != Metrics.MaxRotation || _antiClockwiseCount > 1)
         {
             Progress = 0;
+            _gameManager.SetStep(Step.Zero);
+        }
+        else
+        {
+            _antiClockwiseCount++;
+        }
+    }
+
+    private void StepFive()
+    {
+        if (_isOnStep && _wasOnStep &&
+            DialController.Instance.Degree == _gameManager.CombinationValues[1])
+        {
+            Progress++;
+
+            _gameManager.SetStep(Step.Two);
+
+            _antiClockwiseCount = 0;
+
+            ResetStep();
+        }
+        else if (_curValue != Metrics.MaxRotation || _antiClockwiseCount > 1)
+        {
+            Progress = 0;
+            _gameManager.SetStep(Step.Zero);
         }
         else
         {
@@ -207,17 +276,21 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private void StepSix()
     {
-        if (_isOnStep && _wasOnStep)
+        if (_isOnStep && _wasOnStep &&
+            DialController.Instance.Degree == _gameManager.CombinationValues[2])
         {
+            _gameManager.SetStep(Step.Three);
+
             Progress++;
 
             _clockwiseCount = 0;
 
             ResetStep();
         }
-        else if (_curValue != Metrics.MinDegree)
+        else if (_curValue != Metrics.MinDegree || _clockwiseCount > 1)
         {
             Progress = 0;
+            _gameManager.SetStep(Step.Zero);
         }
         else
         {
