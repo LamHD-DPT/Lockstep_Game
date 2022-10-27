@@ -1,3 +1,4 @@
+using Racer.SoundManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -5,6 +6,7 @@ using UnityEngine.UI;
 public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerUpHandler
 {
     private RaycastResult _raycastResult;
+
     private Slider _slider;
     private GameManager _gameManager;
 
@@ -20,15 +22,22 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     private int _prevValue;
     private int _curValue;
 
+    [Header("SFXs")]
+    [SerializeField] private AudioClip progressSfx;
+
     public int Progress
     {
         get => _progress;
         set
         {
             _progress = value;
-            UIController.Instance.SetGuideText(_progress);
+
+            if (_gameManager.IsOnDemo)
+                UIController.Instance.SetGuideText(_progress);
         }
     }
+
+    // TODO: Vibration
 
     private void Awake()
     {
@@ -71,7 +80,6 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         _raycastResult = eventData.pointerPressRaycast;
 
         // Knob depth: 6
-
         if (!_isDrag && _raycastResult.depth != 6)
         {
             Progress = 0;
@@ -184,6 +192,8 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if (_curValue == Metrics.MinDegree || _curValue == Metrics.MaxRotation)
         {
             Progress++;
+
+            PlaySfx();
         }
     }
 
@@ -193,7 +203,9 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             _clockwiseCount++;
 
-            Debug.Log($"Clockwise Count: {_clockwiseCount}");
+            PlaySfx();
+
+          //  Debug.Log($"Clockwise Count: {_clockwiseCount}");
         }
         else
         {
@@ -235,6 +247,8 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             Progress++;
 
+            PlaySfx();
+
             _antiClockwiseCount = 0;
 
             ResetStep();
@@ -249,6 +263,7 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             _antiClockwiseCount++;
         }
     }
+
 
     private void StepFive()
     {
@@ -296,5 +311,10 @@ public class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             _clockwiseCount++;
         }
+    }
+
+    private void PlaySfx()
+    {
+        SoundManager.Instance.PlaySfx(progressSfx, .25f);
     }
 }

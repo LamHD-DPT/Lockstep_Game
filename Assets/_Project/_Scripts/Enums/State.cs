@@ -1,4 +1,4 @@
 internal enum State
 {
-    Init, Playing, Gameover, Exit
+    Init, Playing, Gameover, GameoverDemo, Exit
 }

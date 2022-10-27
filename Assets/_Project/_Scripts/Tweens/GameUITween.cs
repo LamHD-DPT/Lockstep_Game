@@ -1,4 +1,6 @@
 using DG.Tweening;
+using Racer.SoundManager;
+using Racer.Utilities;
 using UnityEngine;
 
 internal class GameUITween : MonoBehaviour
@@ -21,10 +23,19 @@ internal class GameUITween : MonoBehaviour
     [SerializeField] private UIElement newUI;
 
 
-    public void DisplayInfoUI(bool value, float delay = 0)
+    public void DisplayInfoUI(bool value, float delay = 0, AudioClip clip = null)
     {
         if (value)
-            MoveUI(infoUI, delay);
+            infoUI.rectTransform.DOAnchorPos(infoUI.EndValue,
+                    infoUI.Duration)
+                .SetDelay(delay)
+                .SetUpdate(true)
+                .SetEase(infoUI.EaseType)
+                .OnComplete(() =>
+                {
+                    if (clip != null)
+                        SoundManager.Instance.PlaySfx(clip, .5f);
+                });
         else
             HideUI(infoUI, delay);
     }
@@ -92,7 +103,7 @@ internal class GameUITween : MonoBehaviour
 
     public void PlayNewUI()
     {
-        // newUI.rectTransform.gameObject.ToggleActive(true);
+        newUI.rectTransform.gameObject.ToggleActive(true);
 
         _tween = newUI.rectTransform.DOScale(newUI.EndValue,
                 newUI.Duration)
@@ -127,6 +138,7 @@ internal class GameUITween : MonoBehaviour
             .SetEase(uiElement.EaseType);
     }
 
+
     private static void HideUI(UIElement uiElement, float delay = 0f)
     {
         uiElement.rectTransform.DOAnchorPos(uiElement.StartValue, uiElement.Duration)
@@ -158,6 +170,7 @@ internal class GameUITween : MonoBehaviour
         uiElement.rectTransform.localScale = _isResetScale ? uiElement.EndValue : uiElement.StartValue;
     }
 
+    #region Cheat
     [ContextMenu(nameof(ResetAllPos))]
     private void ResetAllPos()
     {
@@ -187,4 +200,5 @@ internal class GameUITween : MonoBehaviour
         if (DOTween.instance)
             _tween?.Kill();
     }
+    #endregion
 }

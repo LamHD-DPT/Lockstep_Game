@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Racer.SaveManager;
 using Racer.Utilities;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -19,7 +20,11 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
 
     [Space(5), SerializeField] private float initTime = 30;
 
+    [SerializeField] private bool isDemo;
+
     public State CurrentState => gameState;
+
+    public bool IsOnDemo { get; private set; }
 
 
     protected override void Awake()
@@ -27,6 +32,8 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
         base.Awake();
 
         InitValues();
+
+        IsOnDemo = SaveManager.GetBool("Demo") || isDemo;
     }
 
     private IEnumerator Start()
@@ -39,6 +46,7 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
         UIController.Instance.SetSliderValue(_randomValue);
     }
 
+    // TODO:
     private void InitValues()
     {
         // Second number will always be less than first's
@@ -57,15 +65,13 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
         _randomValue = Random.Range(10, 360);
     }
 
-
     public void SetStep(Step newStep)
     {
         currentStep = newStep;
 
         OnCurrentStep?.Invoke(currentStep);
 
-        if (newStep == Step.Three)
-            SetGameState(State.Gameover);
+        if (newStep == Step.Three) SetGameState(IsOnDemo ? State.GameoverDemo : State.Gameover);
     }
 
     public void SetGameState(State newState)
@@ -75,12 +81,19 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
         OnGameState?.Invoke(gameState);
     }
 
+    #region Cheat
     private void Update()
     {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.K))
             SetGameState(State.Gameover);
 
         else if (Input.GetKeyDown(KeyCode.L))
             SetGameState(State.Exit);
+
+        else if (Input.GetKeyDown(KeyCode.J))
+            SetGameState(State.GameoverDemo);
+#endif
     }
+    #endregion
 }
