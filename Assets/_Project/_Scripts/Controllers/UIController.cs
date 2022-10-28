@@ -8,16 +8,15 @@ using Slider = UnityEngine.UI.Slider;
 
 internal class UIController : SingletonPattern.Singleton<UIController>
 {
+    private GameUITween _gameUITween;
+    private SoundManager _soundManager;
+    private TextPopulator _textPopulator;
+
     private bool _isGameoverDemo;
     private bool _isGameover;
 
-    private GameUITween _gameUITween;
-
     [field: SerializeField]
     public FillBar FillBar { get; private set; }
-
-    [SerializeField, TextArea(), Space(5)]
-    private string[] guideValues;
 
     [Space(5), Header("TEXTS")]
     [SerializeField] private TextMeshProUGUI[] combinationTexts;
@@ -45,10 +44,15 @@ internal class UIController : SingletonPattern.Singleton<UIController>
 
     // TODO: Populate Info text values
     // TODO: Populate guide text values, esp the last value on gameover
+    // TODO: Add them to text file
 
     private void Start()
     {
         _gameUITween = GetComponent<GameUITween>();
+        _soundManager = SoundManager.Instance;
+        _textPopulator = TextPopulator.Instance;
+
+        infoT.text = _textPopulator.TipTexts[0];
 
         GameManager.Instance.OnGameState += Instance_OnGameState;
         GameManager.Instance.OnCurrentStep += Instance_OnCurrentStep;
@@ -73,7 +77,10 @@ internal class UIController : SingletonPattern.Singleton<UIController>
 
     public void SetGuideText(int index)
     {
-        guideT.text = guideValues[index];
+        guideT.text = index <= _textPopulator.GuideTexts.Count
+            ? TextPopulator.Instance.GuideTexts[index]
+            : _textPopulator.CheerUpTexts[Random.Range(0,
+                _textPopulator.CheerUpTexts.Count)];
     }
 
     public void SwitchLeft()
@@ -96,6 +103,11 @@ internal class UIController : SingletonPattern.Singleton<UIController>
             return;
 
         SwapPauseSprite(isPause);
+
+        if (isPause)
+            _soundManager.GetSnapShot(1).TransitionTo(.1f);
+        else
+            _soundManager.GetSnapShot(0).TransitionTo(.1f);
 
         slider.interactable = !isPause;
     }
@@ -135,14 +147,16 @@ internal class UIController : SingletonPattern.Singleton<UIController>
             case Step.Two:
             case Step.Three:
                 FillBar.IncreaseFill((int)step - 1);
-                SoundManager.Instance.PlaySfx(correctSfx);
+                _soundManager.PlaySfx(correctSfx);
                 break;
 
             case Step.Zero:
                 FillBar.DecreaseFill(2);
                 FillBar.DecreaseFill(1);
                 FillBar.DecreaseFill(0);
-                SoundManager.Instance.PlaySfx(errorSfx);
+                _soundManager.PlaySfx(errorSfx);
+                Haptics.Vibrate(100);
+                ShowInfo(_textPopulator.TipTexts[Random.Range(1, 7)]);
                 break;
         }
     }
@@ -174,7 +188,7 @@ internal class UIController : SingletonPattern.Singleton<UIController>
             case State.GameoverDemo:
                 _isGameoverDemo = true;
                 slider.interactable = false;
-                SoundManager.Instance.PlaySfx(winSfx);
+                _soundManager.PlaySfx(winSfx);
                 OnExitUI(false);
                 break;
 

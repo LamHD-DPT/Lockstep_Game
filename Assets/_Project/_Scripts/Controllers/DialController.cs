@@ -42,7 +42,7 @@ internal class DialController : SingletonPattern.Singleton<DialController>
             return;
 
         // Not really precise, but fair enough.
-        _degree = (value / Metrics.MaxRotation * Metrics.MaxDegree);
+        _degree = Metrics.MaxDegree - (value / Metrics.MaxRotation * Metrics.MaxDegree);
 
         if (Degree == Metrics.MaxDegree)
             Degree = Metrics.MinDegree;
@@ -51,7 +51,7 @@ internal class DialController : SingletonPattern.Singleton<DialController>
 
         _uiController.SetDegreeText(Degree);
 
-        _angle.z = -value;
+        _angle.z = value;
     }
 
     private void Update()
@@ -76,7 +76,7 @@ internal class DialController : SingletonPattern.Singleton<DialController>
             case State.GameoverDemo:
             case State.Gameover:
                 _isGameover = true;
-                _animator.SetTrigger(Utility.GetAnimId("Unlock"));
+                _animator.SetTrigger(Metrics.Unlock);
                 break;
         }
     }
@@ -102,6 +102,6 @@ internal class DialController : SingletonPattern.Singleton<DialController>
         }
 
         _isSet = !_isSet;
-        #endregion
     }
+    #endregion
 }

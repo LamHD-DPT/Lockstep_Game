@@ -31,9 +31,9 @@ internal class GameUITween : MonoBehaviour
                 .SetDelay(delay)
                 .SetUpdate(true)
                 .SetEase(infoUI.EaseType)
-                .OnComplete(() =>
+                .OnPlay(() =>
                 {
-                    if (clip != null)
+                    if (clip)
                         SoundManager.Instance.PlaySfx(clip, .5f);
                 });
         else

@@ -1,12 +1,10 @@
-using System;
 using Racer.SaveManager;
+using Racer.Utilities;
 using TMPro;
 using UnityEngine;
 
 public class TimeController : MonoBehaviour
 {
-    private TimeSpan _timeSpan;
-
     private bool _isDemo;
     private bool _isGameover;
 
@@ -42,21 +40,7 @@ public class TimeController : MonoBehaviour
 
         _currentTime = Time.timeSinceLevelLoad;
 
-        UpdateGamePlayTime();
-    }
-
-    /// <summary>
-    /// Time player spends on a session.
-    /// </summary>
-    private void UpdateGamePlayTime()
-    {
-        _timeSpan = TimeSpan.FromSeconds(_currentTime);
-
-        if (_timeSpan.Hours < 60)
-            countdownT.text = $"{_timeSpan.Minutes}m:{_timeSpan.Seconds}s";
-
-        if (_timeSpan.Hours >= 60)
-            countdownT.text = $"{_timeSpan.Hours}h:{_timeSpan.Minutes}m:{_timeSpan.Seconds}s";
+        countdownT.text =  Utility.TimeFormat(_currentTime);
     }
 
     /// <summary>

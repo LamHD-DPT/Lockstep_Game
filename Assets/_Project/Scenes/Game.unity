@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4430028, g: 0.49219507, b: 0.57192504, a: 1}
+  m_IndirectSpecularColor: {r: 0.16502528, g: 0.20688803, b: 0.28675547, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1374,7 +1374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.2}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.29803923}
   m_EffectDistance: {x: 0, y: -10}
   m_UseGraphicAlpha: 1
 --- !u!1 &568512772
@@ -1581,10 +1581,6 @@ PrefabInstance:
     - target: {fileID: 2991865002268518564, guid: 41a66b51a130a9c499922858b0004d6a, type: 3}
       propertyPath: m_Name
       value: SoundManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 2991865002986005158, guid: 41a66b51a130a9c499922858b0004d6a, type: 3}
-      propertyPath: m_PlayOnAwake
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41a66b51a130a9c499922858b0004d6a, type: 3}
@@ -2094,7 +2090,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.14901961}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.29803923}
   m_EffectDistance: {x: 0, y: -10}
   m_UseGraphicAlpha: 1
 --- !u!114 &949354399
@@ -2240,7 +2236,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 0.8509804, b: 0.8509804, a: 0}
+  m_BackGroundColor: {r: 1, g: 0.7, b: 0.7, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -2304,6 +2300,7 @@ MonoBehaviour:
   smoothTime: 0.25
   winFx: {fileID: 442763013}
   winSfx: {fileID: 8300000, guid: 8638d27e335d0d74192c7667737e7e66, type: 3}
+  floorMaterial: {fileID: 2100000, guid: c638b1dea02f8ef44a36b44bc8e7b1f0, type: 2}
 --- !u!1 &967006888
 GameObject:
   m_ObjectHideFlags: 0
@@ -3128,6 +3125,118 @@ RectTransform:
   m_AnchoredPosition: {x: -4.9999847, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1179321563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1179321564}
+  - component: {fileID: 1179321565}
+  m_Layer: 0
+  m_Name: TextPopulator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1179321564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179321563}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1474300152}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1179321565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179321563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d574749b3d50ace4f83966154c4204e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textFile: {fileID: 4900000, guid: fc4e21a7c1fe2454c815125ed1b214dd, type: 3}
+  allTexts:
+  - '#1 Guide text cheer up messages'
+  - Congratulations!
+  - Awesome!
+  - Whoo Hoo!
+  - Way to go!
+  - Nailed it!
+  - Good Game!
+  - Hats off!
+  - Mazel tov!
+  - Props!
+  - Cheers!
+  - 
+  - '#2 Guide texts during play'
+  - Start at zero
+  - Move clockwise three full rotations X3
+  - Maintain the same direction, stop at your first number
+  - Move anti-clockwise once, stop at your first number X1
+  - Continue on-past that direction, stop at your second number
+  - Move clockwise, stop at your third number
+  - 
+  - '#3 Tips texts during play'
+  - Carefully match the lock combinations to unlock the next level.
+  - oops!
+  - Slow down
+  - Maybe confusing now but gets easier with time
+  - Cheer up, try again
+  - It's not that difficult
+  - Relax
+  - Your time's passing tho ;-)
+  - Enjoying it? Glad! ^_^
+  - 
+  - '#4 About Game text'
+  - You're provided with a combination master lock with it's lock values, by taking
+    your time you get the chance to unlock the master lock and advance to next level.
+  - Please checkout the Instructional Play first(Home Menu) if you're new to unlocking
+    a combination lock.
+  - 
+  - '- Developed by Native Lions for IGDA Game Jam.'
+  - '- Thanks for playing!'
+  <CheerUpTexts>k__BackingField:
+  - Congratulations!
+  - Awesome!
+  - Whoo Hoo!
+  - Way to go!
+  - Nailed it!
+  - Good Game!
+  - Hats off!
+  - Mazel tov!
+  - Props!
+  - Cheers!
+  <GuideTexts>k__BackingField:
+  - Start at zero
+  - Move clockwise three full rotations X3
+  - Maintain the same direction, stop at your first number
+  - Move anti-clockwise once, stop at your first number X1
+  - Continue on-past that direction, stop at your second number
+  - Move clockwise, stop at your third number
+  <TipTexts>k__BackingField:
+  - Carefully match the lock combinations to unlock the next level.
+  - oops!
+  - Slow down
+  - Maybe confusing now but gets easier with time
+  - Cheer up, try again
+  - It's not that difficult
+  - Relax
+  - Your time's passing tho ;-)
+  - Enjoying it? Glad! ^_^
 --- !u!1001 &1232515738
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3385,7 +3494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.14901961}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.29803923}
   m_EffectDistance: {x: 0, y: -10}
   m_UseGraphicAlpha: 1
 --- !u!114 &1310987577
@@ -3587,6 +3696,7 @@ Transform:
   m_Children:
   - {fileID: 1381738792}
   - {fileID: 1990863821}
+  - {fileID: 1179321564}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4060,7 +4170,7 @@ MonoBehaviour:
   currentStep: 0
   gameState: 0
   initTime: 1
-  isDemo: 0
+  isDemo: 1
 --- !u!4 &1650859950
 Transform:
   m_ObjectHideFlags: 0
@@ -4795,7 +4905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.2}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.29803923}
   m_EffectDistance: {x: 0, y: -10}
   m_UseGraphicAlpha: 1
 --- !u!1 &1864257643
@@ -4864,8 +4974,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4289901234
-  m_fontColor: {r: 0.698, g: 0.698, b: 0.698, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4963,14 +5073,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <FillBar>k__BackingField: {fileID: 1658959009}
-  guideValues:
-  - Start at zero
-  - Move clockwise three full rotations
-  - Maintain the same rotation and obtain your first number
-  - Move anti-clockwise once stop at your first number
-  - Continue on-past it and obtain your second number
-  - Move clockwise and obtain your third number
-  - Congratulations!
   combinationTexts:
   - {fileID: 146665275}
   - {fileID: 204454767}

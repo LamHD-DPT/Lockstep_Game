@@ -6,19 +6,27 @@ using UnityEngine;
 internal class CameraController : MonoBehaviour
 {
     private bool _isShifted;
+    private Color _color;
 
     [SerializeField] private Vector3 targetPos;
     [SerializeField] private Vector3 initialPos;
 
-    [SerializeField, Space(5)] private float smoothTime = .25f;
+    [SerializeField, Space(5)]
+    private float smoothTime = .25f;
 
     [Header("EFFECTS"), Space(5)]
     [SerializeField] private ParticleSystem winFx;
     [SerializeField] private AudioClip winSfx;
 
+    [Header("OTHERS"), Space(5)]
+    [SerializeField] private Material floorMaterial;
+
     private void Awake()
     {
-        GetComponentInChildren<Camera>().backgroundColor = RandomColor();
+        _color = RandomColor();
+
+        GetComponentInChildren<Camera>().backgroundColor = _color;
+        floorMaterial.color = _color;
     }
 
     // TODO: Move to Awake()
@@ -35,7 +43,7 @@ internal class CameraController : MonoBehaviour
 
     private IEnumerator MoveRoutine()
     {
-        yield return Utility.GetWaitForSeconds(1.5f);
+        yield return Utility.GetWaitForSeconds(2f);
 
         float elapsed = 0;
 
@@ -63,11 +71,11 @@ internal class CameraController : MonoBehaviour
 
         _isShifted = !_isShifted;
     }
+    #endregion
 
-    private static Color RandomColor(float s = .15f, float v = 1f)
+    private static Color RandomColor(float s = .3f, float v = 1f)
     {
-        // Todo
-        var hue = (Random.Range(0f, 10f) / 10.0f) + .01f;
+        var hue = (Random.Range(0f, 10f) / 10.0f);
 
         return Color.HSVToRGB(hue, s, v);
     }
@@ -76,5 +84,4 @@ internal class CameraController : MonoBehaviour
     {
         GameManager.Instance.OnGameState -= Instance_OnGameState;
     }
-    #endregion
 }

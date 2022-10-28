@@ -15,9 +15,6 @@ internal class FillBar : MonoBehaviour
     [SerializeField, Space(5)]
     private float smoothTime = .25f;
 
-    public event Action StartCallback;
-    public event Action FinishCallback;
-
 
     public void IncreaseFill(int index)
     {
@@ -42,9 +39,6 @@ internal class FillBar : MonoBehaviour
         if (fills[index].fillAmount.Equals(amount))
             yield break;
 
-        // Before Interpolation, notify listeners
-        StartCallback?.Invoke();
-
         var preChangeAmount = fills[index].fillAmount;
 
         float elapsed = 0;
@@ -59,8 +53,5 @@ internal class FillBar : MonoBehaviour
         }
 
         fills[index].fillAmount = amount;
-
-        // After Interpolation, notify listeners
-        FinishCallback?.Invoke();
     }
 }

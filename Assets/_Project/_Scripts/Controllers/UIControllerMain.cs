@@ -1,16 +1,27 @@
 using Racer.LoadManager;
 using Racer.SaveManager;
+using Racer.Utilities;
 using TMPro;
 using UnityEngine;
 
 public class UIControllerMain : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI levelT;
+    private float _bestTime;
+    private int _level;
 
+    [SerializeField] private TextMeshProUGUI levelT;
+    [SerializeField] private TextMeshProUGUI bestTimeT;
+
+    private void Awake()
+    {
+        _bestTime = SaveManager.GetFloat("BestTime");
+        _level = SaveManager.GetInt("Level");
+    }
 
     private void Start()
     {
-        levelT.text = $"{SaveManager.GetInt("Level")}";
+        levelT.text = $"{_level}";
+        bestTimeT.text = Utility.TimeFormat(_bestTime);
     }
 
 
@@ -20,6 +31,7 @@ public class UIControllerMain : MonoBehaviour
 
         LoadManager.Instance.LoadSceneAsync(1);
     }
+
 
     public void ExitGame()
     {

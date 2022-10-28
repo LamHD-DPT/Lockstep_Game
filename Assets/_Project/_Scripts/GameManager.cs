@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 internal class GameManager : SingletonPattern.Singleton<GameManager>
 {
+    private int _randomNumber;
+
     public int[] CombinationValues { get; private set; }
 
     private float _randomValue;
@@ -46,23 +48,17 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
         UIController.Instance.SetSliderValue(_randomValue);
     }
 
-    // TODO:
     private void InitValues()
     {
-        // Second number will always be less than first's
-        // Last number will always be greater than the second's
+        CombinationValues = new int[3];
 
-        CombinationValues = new[]
-        {
-            Random.Range(1,
-                Metrics.MaxDegree),
-            Random.Range(1,
-                Metrics.MaxDegree),
-            Random.Range(1,
-                Metrics.MaxDegree)
-        };
+        _randomNumber = Random.Range(1, Metrics.MaxDegree);
 
-        _randomValue = Random.Range(10, 360);
+        CombinationValues[0] = _randomNumber;
+        CombinationValues[1] = Random.Range(0, _randomNumber);
+        CombinationValues[2] = Random.Range(_randomNumber, Metrics.MaxDegree);
+
+        _randomValue = Random.Range(5, 355);
     }
 
     public void SetStep(Step newStep)
@@ -71,7 +67,11 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
 
         OnCurrentStep?.Invoke(currentStep);
 
-        if (newStep == Step.Three) SetGameState(IsOnDemo ? State.GameoverDemo : State.Gameover);
+        if (newStep == Step.Three)
+        {
+            SetGameState(IsOnDemo ? State.GameoverDemo : State.Gameover);
+            Haptics.Vibrate(500);
+        }
     }
 
     public void SetGameState(State newState)
