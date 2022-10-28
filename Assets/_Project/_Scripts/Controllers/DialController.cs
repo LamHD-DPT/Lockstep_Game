@@ -2,10 +2,11 @@ using Racer.SoundManager;
 using Racer.Utilities;
 using UnityEngine;
 
+[DefaultExecutionOrder(-8)]
 internal class DialController : SingletonPattern.Singleton<DialController>
 {
     private Animator _animator;
-    private UIController _uiController;
+    private UIControllerGame _uiControllerGame;
 
     private Vector3 _angle;
 
@@ -27,13 +28,15 @@ internal class DialController : SingletonPattern.Singleton<DialController>
     [SerializeField] private AudioClip lockSfx;
     [SerializeField] private AudioClip unlockSfx;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         GameManager.Instance.OnGameState += Instance_OnGameState;
 
         _animator = GetComponent<Animator>();
 
-        _uiController = UIController.Instance;
+        _uiControllerGame = UIControllerGame.Instance;
     }
 
     public void Rotate(float value)
@@ -47,9 +50,7 @@ internal class DialController : SingletonPattern.Singleton<DialController>
         if (Degree == Metrics.MaxDegree)
             Degree = Metrics.MinDegree;
 
-        // Debug.Log($"Degree and value while syncing: {_degree}, {value}");
-
-        _uiController.SetDegreeText(Degree);
+        _uiControllerGame.SetDegreeText(Degree);
 
         _angle.z = value;
     }
@@ -85,6 +86,10 @@ internal class DialController : SingletonPattern.Singleton<DialController>
 
     public void PlayUnlockSfx() => SoundManager.Instance.PlaySfx(unlockSfx);
 
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnGameState -= Instance_OnGameState;
+    }
 
     #region Cheat
     [ContextMenu(nameof(SetPosAndRot))]

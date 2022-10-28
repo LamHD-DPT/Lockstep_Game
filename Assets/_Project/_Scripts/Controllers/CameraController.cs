@@ -25,15 +25,11 @@ internal class CameraController : MonoBehaviour
     {
         _color = RandomColor();
 
-        GetComponentInChildren<Camera>().backgroundColor = _color;
-        floorMaterial.color = _color;
+        GameManager.Instance.OnGameState += Instance_OnGameState;
+
+        GetComponentInChildren<Camera>().backgroundColor = floorMaterial.color = _color;
     }
 
-    // TODO: Move to Awake()
-    private void Start()
-    {
-        GameManager.Instance.OnGameState += Instance_OnGameState;
-    }
 
     private void Instance_OnGameState(State state)
     {

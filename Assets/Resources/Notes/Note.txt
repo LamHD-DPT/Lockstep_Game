@@ -12,13 +12,14 @@ Cheers!
 
 #2 Guide texts during play
 Start at zero
-Move clockwise three full rotations X3
-Maintain the same direction, stop at your first number
-Move anti-clockwise once, stop at your first number X1
+Move clockwise thrice X3, stop at the right zero
+Continue on-past that direction, stop at your first number
+Move anti-clockwise once X1, stop at your first number
 Continue on-past that direction, stop at your second number
-Move clockwise, stop at your third number
+Move clockwise once, stop at your third number
 
 #3 Tips texts during play
+Carefully match the lock combinations by following the guidelines.
 Carefully match the lock combinations to unlock the next level.
 oops!
 Slow down.

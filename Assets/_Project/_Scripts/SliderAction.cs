@@ -33,21 +33,18 @@ internal class SliderAction : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
             _progress = value;
 
             if (_gameManager.IsOnDemo)
-                UIController.Instance.SetGuideText(_progress);
+                UIControllerGame.Instance.SetGuideText(_progress);
         }
     }
-
-    // TODO: Vibration
 
     private void Awake()
     {
         _slider = GetComponent<Slider>();
+        _gameManager = GameManager.Instance;
     }
 
     private void Start()
     {
-        _gameManager = GameManager.Instance;
-
         _prevValue = (int)_slider.value;
         _curValue = _prevValue;
     }

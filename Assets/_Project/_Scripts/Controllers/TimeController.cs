@@ -2,26 +2,34 @@ using Racer.SaveManager;
 using Racer.Utilities;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class TimeController : MonoBehaviour
+internal class TimeController : MonoBehaviour
 {
+    private TextPopulator _textPopulator;
+    private GameManager _gameManager;
+
     private bool _isDemo;
     private bool _isGameover;
 
+    private float _notifyTime;
     private float _currentTime;
     private float _bestTime;
 
     [SerializeField] private TextMeshPro timeT3d;
     [SerializeField] private TextMeshProUGUI countdownT;
 
-
-    private void Start()
+    private void Awake()
     {
+        _textPopulator = TextPopulator.Instance;
+        _gameManager = GameManager.Instance;
+
+        _isDemo = _gameManager.IsOnDemo;
+        _gameManager.OnGameState += Instance_OnGameState;
+
         _bestTime = SaveManager.GetFloat("BestTime");
 
-        _isDemo = GameManager.Instance.IsOnDemo;
-
-        GameManager.Instance.OnGameState += Instance_OnGameState;
+        _notifyTime = Metrics.AlertTime;
     }
 
     private void Instance_OnGameState(State state)
@@ -40,7 +48,16 @@ public class TimeController : MonoBehaviour
 
         _currentTime = Time.timeSinceLevelLoad;
 
-        countdownT.text =  Utility.TimeFormat(_currentTime);
+        if (_currentTime >= _notifyTime)
+        {
+            UIControllerGame.Instance.ShowInfo(
+                _textPopulator.TipTexts[Random.Range(_textPopulator.TipTexts.Count - 2,
+                    _textPopulator.TipTexts.Count)]);
+
+            _notifyTime += Metrics.AlertTime;
+        }
+
+        countdownT.text = Utility.TimeFormat(_currentTime);
     }
 
     /// <summary>
@@ -54,6 +71,11 @@ public class TimeController : MonoBehaviour
         SaveManager.SaveFloat("BestTime", _currentTime);
 
         if (_bestTime == 0 || _currentTime < _bestTime)
-            UIController.Instance.BestTimeTween();
+            UIControllerGame.Instance.BestTimeTween();
+    }
+
+    private void OnDestroy()
+    {
+        _gameManager.OnGameState -= Instance_OnGameState;
     }
 }

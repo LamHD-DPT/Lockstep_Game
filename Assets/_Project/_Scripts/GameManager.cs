@@ -5,6 +5,7 @@ using Racer.Utilities;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[DefaultExecutionOrder(-11)]
 internal class GameManager : SingletonPattern.Singleton<GameManager>
 {
     private int _randomNumber;
@@ -44,8 +45,8 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
 
         SetGameState(State.Playing);
 
-        UIController.Instance.SetCombinationTexts(CombinationValues[0], CombinationValues[1], CombinationValues[2]);
-        UIController.Instance.SetSliderValue(_randomValue);
+        UIControllerGame.Instance.SetCombinationTexts(CombinationValues[0], CombinationValues[1], CombinationValues[2]);
+        UIControllerGame.Instance.SetSliderValue(_randomValue);
     }
 
     private void InitValues()

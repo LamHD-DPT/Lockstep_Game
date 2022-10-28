@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Racer.Utilities
 {
+    [DefaultExecutionOrder(-10)]
     public class TextPopulator : SingletonPattern.StaticInstance<TextPopulator>
     {
         private int _startIndex;

@@ -6,11 +6,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using Slider = UnityEngine.UI.Slider;
 
-internal class UIController : SingletonPattern.Singleton<UIController>
+[DefaultExecutionOrder(-9)]
+internal class UIControllerGame : SingletonPattern.Singleton<UIControllerGame>
 {
     private GameUITween _gameUITween;
     private SoundManager _soundManager;
     private TextPopulator _textPopulator;
+    private GameManager _gameManager;
 
     private bool _isGameoverDemo;
     private bool _isGameover;
@@ -42,20 +44,24 @@ internal class UIController : SingletonPattern.Singleton<UIController>
     [SerializeField] private AudioClip winSfx;
     [SerializeField] private AudioClip hintSfx;
 
-    // TODO: Populate Info text values
-    // TODO: Populate guide text values, esp the last value on gameover
-    // TODO: Add them to text file
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         _gameUITween = GetComponent<GameUITween>();
         _soundManager = SoundManager.Instance;
         _textPopulator = TextPopulator.Instance;
+        _gameManager = GameManager.Instance;
 
-        infoT.text = _textPopulator.TipTexts[0];
+    }
 
-        GameManager.Instance.OnGameState += Instance_OnGameState;
-        GameManager.Instance.OnCurrentStep += Instance_OnCurrentStep;
+    private void Start()
+    {
+        infoT.text = InitText;
+
+        _gameManager.OnGameState += Instance_OnGameState;
+        _gameManager.OnCurrentStep += Instance_OnCurrentStep;
     }
 
     public void SetDegreeText(float value)
@@ -77,8 +83,8 @@ internal class UIController : SingletonPattern.Singleton<UIController>
 
     public void SetGuideText(int index)
     {
-        guideT.text = index <= _textPopulator.GuideTexts.Count
-            ? TextPopulator.Instance.GuideTexts[index]
+        guideT.text = index <= _textPopulator.GuideTexts.Count - 1
+            ? _textPopulator.GuideTexts[index]
             : _textPopulator.CheerUpTexts[Random.Range(0,
                 _textPopulator.CheerUpTexts.Count)];
     }
@@ -114,7 +120,7 @@ internal class UIController : SingletonPattern.Singleton<UIController>
 
     public void LoadScene()
     {
-        GameManager.Instance.SetGameState(State.Exit);
+        _gameManager.SetGameState(State.Exit);
         LoadManager.Instance.LoadSceneAsync(menuI.sprite == menuSpr[0] ? 0 : 1);
     }
 
@@ -147,6 +153,7 @@ internal class UIController : SingletonPattern.Singleton<UIController>
             case Step.Two:
             case Step.Three:
                 FillBar.IncreaseFill((int)step - 1);
+
                 _soundManager.PlaySfx(correctSfx);
                 break;
 
@@ -154,18 +161,31 @@ internal class UIController : SingletonPattern.Singleton<UIController>
                 FillBar.DecreaseFill(2);
                 FillBar.DecreaseFill(1);
                 FillBar.DecreaseFill(0);
+
                 _soundManager.PlaySfx(errorSfx);
+
                 Haptics.Vibrate(100);
-                ShowInfo(_textPopulator.TipTexts[Random.Range(1, 7)]);
+
+                ShowInfo(_textPopulator.TipTexts[Random.Range(2, 8)]);
+
+                CancelInvoke(nameof(RefreshText));
+                Invoke(nameof(RefreshText), 2.5f);
                 break;
         }
     }
 
+    private void RefreshText() => ShowInfo(InitText);
+
+    private string InitText => _gameManager.IsOnDemo ?
+        _textPopulator.TipTexts[0] :
+        _textPopulator.TipTexts[1];
+
+    // Weird
     private void Instance_OnGameState(State state)
     {
         switch (state)
         {
-            case State.Playing: // Weird
+            case State.Playing:
                 _gameUITween.DisplayCombinationUI(true);
                 _gameUITween.DisplayInfoUI(true, 1.5f, hintSfx);
                 _gameUITween.DisplayActionBtnUI(true, 1f);
@@ -180,21 +200,34 @@ internal class UIController : SingletonPattern.Singleton<UIController>
 
             case State.Gameover:
                 _isGameover = true;
+
                 _gameUITween.DisplayGuideUI(false, 1f);
+
+                ShowInfo(_textPopulator.CheerUpTexts[Random.Range
+                    (0, _textPopulator.CheerUpTexts.Count)]);
+
+                _gameUITween.DisplayInfoUI(false, 1.5f);
+
                 SwapMenuSprite(_isGameover);
+
                 OnExitUI(false);
                 break;
 
             case State.GameoverDemo:
                 _isGameoverDemo = true;
                 slider.interactable = false;
-                _soundManager.PlaySfx(winSfx);
+                _gameUITween.DisplayInfoUI(false);
+
+                _soundManager.PlaySfx(winSfx, .8f);
+
                 OnExitUI(false);
                 break;
 
             case State.Exit:
                 _gameUITween.DisplayActionBtnUI(false);
                 _gameUITween.DisplayGuideUI(false);
+                _gameUITween.DisplayInfoUI(false);
+
                 OnExitUI(false);
                 break;
         }
@@ -203,7 +236,6 @@ internal class UIController : SingletonPattern.Singleton<UIController>
     private void OnExitUI(bool v)
     {
         _gameUITween.DisplayCombinationUI(v);
-        _gameUITween.DisplayInfoUI(v);
         _gameUITween.DisplayFillUI(v);
         _gameUITween.DisplayFrameUI(v);
         _gameUITween.DisplaySliderUI(v);
@@ -214,7 +246,7 @@ internal class UIController : SingletonPattern.Singleton<UIController>
 
     private void OnDestroy()
     {
-        GameManager.Instance.OnGameState -= Instance_OnGameState;
-        GameManager.Instance.OnCurrentStep -= Instance_OnCurrentStep;
+        _gameManager.OnGameState -= Instance_OnGameState;
+        _gameManager.OnCurrentStep -= Instance_OnCurrentStep;
     }
 }

@@ -32,6 +32,12 @@ public class UIControllerMain : MonoBehaviour
         LoadManager.Instance.LoadSceneAsync(1);
     }
 
+    public void ClearSave()
+    {
+        SaveManager.ClearAllPrefs();
+
+        LoadManager.Instance.LoadSceneAsync(0);
+    }
 
     public void ExitGame()
     {

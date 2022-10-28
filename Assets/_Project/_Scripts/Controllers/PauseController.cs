@@ -6,7 +6,7 @@ internal class PauseController : MonoBehaviour
 
     private GameManager _gameManager;
 
-    private void Start()
+    private void Awake()
     {
         _gameManager = GameManager.Instance;
 
@@ -42,7 +42,7 @@ internal class PauseController : MonoBehaviour
     {
         _hasPaused = true;
 
-        UIController.Instance.PauseGame(_hasPaused);
+        UIControllerGame.Instance.PauseGame(_hasPaused);
 
         Time.timeScale = 0;
     }
@@ -51,7 +51,7 @@ internal class PauseController : MonoBehaviour
     {
         _hasPaused = false;
 
-        UIController.Instance.PauseGame(_hasPaused);
+        UIControllerGame.Instance.PauseGame(_hasPaused);
 
         Time.timeScale = 1;
     }

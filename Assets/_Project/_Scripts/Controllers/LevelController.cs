@@ -1,3 +1,4 @@
+using System;
 using Racer.SaveManager;
 using TMPro;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class LevelController : MonoBehaviour
 
     public int CurrentLevel { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         CurrentLevel = SaveManager.GetInt("Level");
 
@@ -27,5 +28,10 @@ public class LevelController : MonoBehaviour
     {
         if (state == State.Gameover)
             NextLevel();
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnGameState -= Instance_OnGameState;
     }
 }

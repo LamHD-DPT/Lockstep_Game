@@ -8,6 +8,7 @@ internal class Metrics
     public const int MinDegree = 0;
     public const int MaxRotation = 360;
     public const int MinRotation = 0;
+    public const int AlertTime = 300;
 
     // Animator Id's
     public static int Unlock = Utility.GetAnimId("Unlock");

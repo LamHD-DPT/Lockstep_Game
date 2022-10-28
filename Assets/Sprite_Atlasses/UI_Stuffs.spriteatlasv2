@@ -74,6 +74,15 @@ SpriteAtlasAsset:
     - {fileID: 2800000, guid: 4baea6c4075d7b54cb50e53ba3e345ce, type: 3}
     - {fileID: 2800000, guid: 4a5abf91d0e001449a9666b8817db457, type: 3}
     - {fileID: 2800000, guid: b191ddc74b74c7d4d8793f748310d8d6, type: 3}
+    - {fileID: 2800000, guid: 5360bc743662d8d4aac395dd1e108433, type: 3}
+    - {fileID: 2800000, guid: 9128e937fad392141ac08ef75f2a4ef6, type: 3}
+    - {fileID: 2800000, guid: cde3fb5ba98119b49b7630b11d2eb768, type: 3}
+    - {fileID: 2800000, guid: 8df9e9ded9ffe5844ac141b749e2896f, type: 3}
+    - {fileID: 2800000, guid: 70b666238fb515d40bfea3fa778d888e, type: 3}
+    - {fileID: 2800000, guid: 353575a3ae3636e4cb3d8b6428dc121f, type: 3}
+    - {fileID: 2800000, guid: aa22a949bbc2eb2489b72901f8a95134, type: 3}
+    - {fileID: 2800000, guid: 9d8e4cc46c3f820449bfbd364ce7305e, type: 3}
+    - {fileID: 2800000, guid: 4bd0a909fb0542a43bf0bf07bf5d47b9, type: 3}
     bindAsDefault: 1
     isAtlasV2: 1
     cachedData: {fileID: 0}

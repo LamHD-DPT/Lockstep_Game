@@ -26,6 +26,10 @@ internal class GameUITween : MonoBehaviour
     public void DisplayInfoUI(bool value, float delay = 0, AudioClip clip = null)
     {
         if (value)
+        {
+            if (clip)
+                SoundManager.Instance.PlaySfx(clip, .5f);
+
             infoUI.rectTransform.DOAnchorPos(infoUI.EndValue,
                     infoUI.Duration)
                 .SetDelay(delay)
@@ -33,9 +37,10 @@ internal class GameUITween : MonoBehaviour
                 .SetEase(infoUI.EaseType)
                 .OnPlay(() =>
                 {
-                    if (clip)
+                    if (clip && delay > 0)
                         SoundManager.Instance.PlaySfx(clip, .5f);
                 });
+        }
         else
             HideUI(infoUI, delay);
     }
