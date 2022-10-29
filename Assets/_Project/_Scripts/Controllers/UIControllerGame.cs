@@ -162,7 +162,7 @@ internal class UIControllerGame : SingletonPattern.Singleton<UIControllerGame>
                 FillBar.DecreaseFill(1);
                 FillBar.DecreaseFill(0);
 
-                _soundManager.PlaySfx(errorSfx);
+                _soundManager.PlaySfx(errorSfx, .5f);
 
                 Haptics.Vibrate(100);
 

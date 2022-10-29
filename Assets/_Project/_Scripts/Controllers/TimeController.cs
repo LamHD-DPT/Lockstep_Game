@@ -68,10 +68,12 @@ internal class TimeController : MonoBehaviour
     {
         timeT3d.text = $"Time: {countdownT.text}";
 
-        SaveManager.SaveFloat("BestTime", _currentTime);
-
         if (_bestTime == 0 || _currentTime < _bestTime)
+        {
             UIControllerGame.Instance.BestTimeTween();
+
+            SaveManager.SaveFloat("BestTime", _currentTime);
+        }
     }
 
     private void OnDestroy()
