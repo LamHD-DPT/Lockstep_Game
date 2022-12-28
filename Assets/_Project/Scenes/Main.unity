@@ -4458,8 +4458,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "You're provided with a <b>combination master-lock</b> with it's unlock
     values, \nby taking your time you get the chance to unlock the <b>master-lock</b>
-    and advance to the next level.\r\nPlease checkout the <b>Instructional Play first(Home
-    Menu),</b> \nif you're new to unlocking a <b>combination lock.</b>"
+    and advance to the next level.\r\nPlease checkout the <b>Instructional Play(Home
+    Menu)</b> first, if you're new to unlocking a <b>combination lock.</b>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 34f5d68fadd9e3542b676f12e9ef099e, type: 2}
   m_sharedMaterial: {fileID: -6909086643499526289, guid: 34f5d68fadd9e3542b676f12e9ef099e, type: 2}

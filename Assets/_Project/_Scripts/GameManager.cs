@@ -56,7 +56,7 @@ internal class GameManager : SingletonPattern.Singleton<GameManager>
         _randomNumber = Random.Range(1, Metrics.MaxDegree);
 
         CombinationValues[0] = _randomNumber;
-        CombinationValues[1] = Random.Range(0, _randomNumber);
+        CombinationValues[1] = Random.Range(1, _randomNumber);
         CombinationValues[2] = Random.Range(_randomNumber, Metrics.MaxDegree);
 
         _randomValue = Random.Range(5, 355);

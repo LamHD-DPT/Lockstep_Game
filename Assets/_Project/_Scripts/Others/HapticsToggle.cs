@@ -1,44 +1,15 @@
-using Racer.SaveManager;
-using Racer.SoundManager;
-
-
-public class HapticsToggle : ToggleProvider
+public class HapticsToggle : SoundToggle
 {
-    private void Awake()
+    protected override void ApplyToggle()
     {
-        InitToggle();
-    }
-
-    protected override void InitToggle()
-    {
-        ToggleIndex = SaveManager.GetInt(saveString);
-
-        SyncToggle();
-    }
-
-    public override void Toggle()
-    {
-        base.Toggle();
-
-        SaveManager.SaveInt(saveString, ToggleIndex);
-
-        SyncToggle();
-    }
-
-    protected override void SyncToggle()
-    {
-        base.SyncToggle();
-
         switch (toggleState)
         {
-            // default:
-            case ToggleState.Play:
+            case ToggleState.On:
                 Haptics.Mute(false);
                 break;
-            case ToggleState.Stop:
+            case ToggleState.Off:
                 Haptics.Mute(true);
                 break;
         }
     }
 }
-

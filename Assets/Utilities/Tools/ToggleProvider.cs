@@ -1,15 +1,13 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
-namespace Racer.SoundManager
+public enum ToggleState { On, Off }
+
+namespace Racer.Utilities
 {
-    public enum ToggleState
-    {
-        Play,
-        Stop,
-    }
-
+    /// <summary>
+    /// Provides useful methods for a Custom Toggle Implementation,
+    /// useful for a two-way toggle; on/off.
+    /// </summary>
     public abstract class ToggleProvider : MonoBehaviour
     {
         // Placeholder for the current effect.
@@ -21,14 +19,6 @@ namespace Racer.SoundManager
         // Handy if you'd save the effect's current state.
         public string saveString;
 
-        [Space(5), Header("Target Graphics")]
-
-        // Parent sprite to be swapped.
-        public Image parentIcon;
-
-        // On/Off Sprites that'd be in-place of parent sprite.
-        [FormerlySerializedAs("offOnIcons")] public Sprite[] onOffIcons;
-
 
         /// <summary>
         /// Retrieves the current state of the Toggle.
@@ -38,6 +28,8 @@ namespace Racer.SoundManager
         /// Invoke your save-class here(retrieval).
         /// </remarks>
         protected abstract void InitToggle();
+
+        protected abstract void ApplyToggle();
 
         /// <summary>
         /// Toggles the current effect On/Off.
@@ -50,7 +42,7 @@ namespace Racer.SoundManager
         {
             ToggleIndex++;
 
-            ToggleIndex %= onOffIcons.Length;
+            ToggleIndex %= (int)ToggleState.Off + 1;
         }
 
         /// <summary>
@@ -58,13 +50,14 @@ namespace Racer.SoundManager
         /// </summary>
         /// <remarks>
         /// Override this method to add extra logic.
+        /// Default state is 0 -> play.
         /// </remarks>
         protected virtual void SyncToggle()
         {
             // 0 = play, 1 = stop
-            toggleState = ToggleIndex == 0 ? ToggleState.Play : ToggleState.Stop;
+            toggleState = ToggleIndex == 0 ? ToggleState.On : ToggleState.Off;
 
-            parentIcon.sprite = onOffIcons[ToggleIndex];
+            ApplyToggle();
         }
     }
 }
