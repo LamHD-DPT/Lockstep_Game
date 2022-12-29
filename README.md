@@ -4,7 +4,7 @@
 *A Hypercasual Game Jam Project.*
 
 ## Game Logic:
-**Lockstep** is an android game I and my team member developed for a Game Jam in accordance with the theme **Combination**. It was developed in roughly one week. In the Gameplay the player is presented with a **Combination Lock** to unlock as soon as possible, in other words; the logic is similar to the steps taken when unlocking a *physical* **Combination Master Lock**. The gameplay is grouped into two scenes; Main Gameplay and Demo Gameplay. The latter comes with instructional guides for players *new* to unlocking a *Combination lock*, while the former contains the actual gameplay flow.
+**Lockstep** is an android game I and my [team member](https://github.com/ChukwumaA) developed for a Game Jam in accordance with the theme **Combination**. It was developed in roughly one week. In the Gameplay the player is presented with a **Combination Lock** to unlock as soon as possible, in other words; the logic is similar to the steps taken when unlocking a *physical* **Combination Master Lock**. The gameplay is grouped into two scenes; Main Gameplay and Demo Gameplay. The latter comes with instructional guides for players *new* to unlocking a *Combination lock*, while the former contains the actual gameplay flow.
 
 ## Tools Used:
 * Unity 2020.3.10f1 
