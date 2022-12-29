@@ -18,8 +18,8 @@
 - Level System
 
 ## Download:
-Get the APK file directly here: [APK File](https://github.com/ebukaracer/Lockstep/releases/download/apk-v1.0.0/Lockstep.apk)
-or from the Game jam page: [APK File](https://iamracer.itch.io/lockstep/)
+Get the APK file directly here: [APK File](https://github.com/ebukaracer/Lockstep/releases/download/apk-v1.1.0/Lockstep.apk)
+<br>or from the Game jam page: [APK File](https://iamracer.itch.io/lockstep/)
 
 ## Gameplay Video:
 [<img src="https://i.ibb.co/s1mkCHq/Lockstep.png" 
